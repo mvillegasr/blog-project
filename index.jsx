@@ -1,26 +1,3 @@
-/* global React */
-/* global ReactDOM */
-/* global ajax */
-
-var LogoutButton = React.createClass({
-  onLogout: function() {
-    ajax('logout.php', null, function(response) {
-      if(response.result === 'error') {
-        alert('Error: ' + response.msg);
-      } else {
-        this.props.onLogout();
-      }
-    }.bind(this));
-  },
-  render: function() {
-    return (
-      <div>
-        <input type='submit' value='Logout' onClick={this.onLogout} /> <br/>
-      </div>
-    );
-  }
-});
-
 var LoginForm = React.createClass({
   getInitialState: function() {
     return {
@@ -48,15 +25,48 @@ var LoginForm = React.createClass({
       }
     }.bind(this));
   },
+  onSignUp: function(e) {
+    ajax('signup.php', {username: this.state.username, password: this.state.password}, function(response) {
+      if(response.result === 'failure') {
+        alert('Bad username or password');
+      } else if(response.result === 'success') {
+        this.props.onLogin(response.blogText);
+      } else if(response.result === 'error') {
+        alert('Error: ' + response.msg);
+      } else {
+        alert('Response message has no result attribute.');
+      }  
+    }.bind(this));
+  },
   render: function() {
     return (
       <div>
         Username: <input type='text'     onChange={this.onUsernameChange} value={this.state.username} /> <br/>
         Password: <input type='password' onChange={this.onPasswordChange} value={this.state.password} /> <br/>
                   <input type='submit'   onClick={this.onSubmit}          value='Login' />               <br/>
+                  <input type='submit'   onClick={this.onSignUp} value='Sign Up'/> <br/>
         <a href="viewblog.php?u=alice">Alice</a><br/>
         <a href="viewblog.php?u=fred">Fred</a><br/>
         <a href="viewblog.php?u=bob">Bob</a>
+      </div>
+    );
+  }
+});
+
+var LogoutButton = React.createClass({
+  onLogout: function() {
+    ajax('logout.php', null, function(response) {
+      if(response.result === 'error') {
+        alert('Error: ' + response.msg);
+      } else {
+        this.props.onLogout();
+      }
+    }.bind(this));
+  },
+  render: function() {
+    return (
+      <div>
+        <input type='submit' value='Logout' onClick={this.onLogout} /> <br/>
       </div>
     );
   }
