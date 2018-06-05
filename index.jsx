@@ -41,10 +41,10 @@ var LoginForm = React.createClass({
   render: function() {
     return (
       <div>
-        Username: <input type='text'     onChange={this.onUsernameChange} value={this.state.username} /> <br/>
-        Password: <input type='password' onChange={this.onPasswordChange} value={this.state.password} /> <br/>
+        <label>Username:</label> <input type='text'     onChange={this.onUsernameChange} value={this.state.username} /> <br/>
+        <label>Password:</label> <input type='password' onChange={this.onPasswordChange} value={this.state.password} /> <br/><br/>
                   <input type='submit'   onClick={this.onSubmit}          value='Login' />               <br/>
-                  <input type='submit'   onClick={this.onSignUp} value='Sign Up'/> <br/>
+                  <input type='submit'   onClick={this.onSignUp} value='Sign Up' /> <br/><br/>
         <a href="viewblog.php?u=alice">Alice</a><br/>
         <a href="viewblog.php?u=fred">Fred</a><br/>
         <a href="viewblog.php?u=bob">Bob</a>
@@ -123,7 +123,7 @@ var App = React.createClass({
       if (response.result === 'error') {
         alert('Error: ' + response.msg);
       } else if (response.result === 'loggedIn') {
-        this.setState({ blogText: response.blogText, loading: false });
+        this.setState({ blogText: response.blogText, loading: false});
       } else if (response.result === 'notLoggedIn') {
         this.setState({ blogText: null, loading: false });
       } else {
