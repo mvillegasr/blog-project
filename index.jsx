@@ -1,7 +1,8 @@
 var ShowBlogs = React.createClass({
   getInitialState: function() {
     return {
-      users: ''
+      users: '',
+      blog: ''
     };
   },
   componentDidMount: function() {
@@ -10,13 +11,18 @@ var ShowBlogs = React.createClass({
         alert('Error: ' + response.msg);
       } else {
         this.setState({users: response.username});
+        this.setState({blog: response.blogtext});
+        console.log(this.state.blog);
       }
     }.bind(this));
+  },
+  displayBlog: function() {
+    window.alert(this.state.blog);
   },
   render: function() {
     return (
       <div>
-        <a href="#">{ this.state.users }</a>
+        <a href="#" onClick={this.displayBlog}>{ this.state.users }</a>
       </div>
     );
   }
