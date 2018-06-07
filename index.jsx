@@ -1,7 +1,7 @@
 var ShowBlogs = React.createClass({
   getInitialState: function() {
     return {
-      users: '',
+      users: [],
       blog: ''
     };
   },
@@ -10,19 +10,24 @@ var ShowBlogs = React.createClass({
       if(response.result === 'error') {
         alert('Error: ' + response.msg);
       } else {
-        this.setState({users: response.username});
-        this.setState({blog: response.blogtext});
-        console.log(this.state.blog);
+        for (var i = 0; i < response.size; i++) {
+          this.setState(prev => ({ users: [...prev.users, response[i]]}));
+        }
       }
     }.bind(this));
   },
   displayBlog: function() {
     window.alert(this.state.blog);
   },
+
   render: function() {
     return (
       <div>
-        <a href="#" onClick={this.displayBlog}>{ this.state.users }</a>
+        <ul>
+          {this.state.users.map(function(showList){
+            return <li><a href="#">{ showList }</a></li>;
+          })}
+        </ul>
       </div>
     );
   }
