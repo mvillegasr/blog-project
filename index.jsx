@@ -1,8 +1,32 @@
+var ShowBlogs = React.createClass({
+  getInitialState: function() {
+    return {
+      users: ''
+    };
+  },
+  componentDidMount: function() {
+    ajax('viewblog.php', null, function(response) {
+      if(response.result === 'error') {
+        alert('Error: ' + response.msg);
+      } else {
+        this.setState({users: response.username});
+      }
+    }.bind(this));
+  },
+  render: function() {
+    return (
+      <div>
+        <a href="#">{ this.state.users }</a>
+      </div>
+    );
+  }
+});
+
 var LoginForm = React.createClass({
   getInitialState: function() {
     return {
       username: 'alice',
-      password: '1234'
+      password: '1234',
     };
   },
   onUsernameChange: function(e) {
@@ -43,11 +67,9 @@ var LoginForm = React.createClass({
       <div>
         <label>Username:</label> <input type='text'     onChange={this.onUsernameChange} value={this.state.username} /> <br/>
         <label>Password:</label> <input type='password' onChange={this.onPasswordChange} value={this.state.password} /> <br/><br/>
-                  <input type='submit'   onClick={this.onSubmit}          value='Login' />               <br/>
-                  <input type='submit'   onClick={this.onSignUp} value='Sign Up' /> <br/><br/>
-        <a href="viewblog.php?u=alice">Alice</a><br/>
-        <a href="viewblog.php?u=fred">Fred</a><br/>
-        <a href="viewblog.php?u=bob">Bob</a>
+        <input type='submit'   onClick={this.onSubmit} value='Login' />               <br/>
+        <input type='submit'   onClick={this.onSignUp} value='Sign Up' /> <br/><br/>
+        <ShowBlogs />
       </div>
     );
   }
@@ -110,12 +132,14 @@ var LoadingScreen = React.createClass({
   }
 });
 
+//Main Componenent
 var App = React.createClass({
   getInitialState: function() {
     // blogText set to null means the user is not logged in.
     return {
       loading: true,
-      blogText: null
+      blogText: null,
+      users: ''
     };
   },
   componentDidMount: function() {
@@ -125,7 +149,7 @@ var App = React.createClass({
       } else if (response.result === 'loggedIn') {
         this.setState({ blogText: response.blogText, loading: false});
       } else if (response.result === 'notLoggedIn') {
-        this.setState({ blogText: null, loading: false });
+        this.setState({ blogText: null, loading: false});
       } else {
         alert('Response message has no result attribute.');
       }
@@ -144,7 +168,9 @@ var App = React.createClass({
     if (this.state.loading) {
       return <LoadingScreen />;
     } else if (this.state.blogText === null) {
-      return <LoginScreen onLogin={this.onLogin} />;
+      return (
+        <LoginScreen onLogin={this.onLogin} />
+      );
     } else {
       return (
           <ClickScreen 
