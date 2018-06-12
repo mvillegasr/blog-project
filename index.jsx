@@ -1,8 +1,9 @@
-var ShowBlogs = React.createClass({
+var ShowUsers = React.createClass({
   getInitialState: function() {
     return {
       users: [],
-      blog: ''
+      blog: '',
+      clickeduser: '',
     };
   },
   componentDidMount: function() {
@@ -16,17 +17,28 @@ var ShowBlogs = React.createClass({
       }
     }.bind(this));
   },
-  displayBlog: function() {
-    window.alert(this.state.blog);
+  onUserClick: function(e) {
+    this.setState({clickeduser: e.currentTarget.id});
+    if(this.state.clickeduser = e.currentTarget.id) {
+      ajax('displayblog.php', { clickeduser: this.state.clickeduser }, function(response) {
+        if(response.result === 'error') {
+          alert('Error: ' + response.msg);
+        } else {
+          console.log(response.blog);
+          this.setState({blog: response.blog});
+          }
+      }.bind(this));
+    }
   },
-
   render: function() {
+    var display = this.state.users.map((showList) => <li onClick={this.onUserClick} id={showList}><a href='javascript: void 0'>{showList}</a></li>);
+    var showBlog = <textarea value= {this.state.blog}/>;
     return (
       <div>
         <ul>
-          {this.state.users.map(function(showList){
-            return <li><a href="#">{ showList }</a></li>;
-          })}
+          {display} <br/>
+          {showBlog}
+
         </ul>
       </div>
     );
@@ -80,7 +92,7 @@ var LoginForm = React.createClass({
         <label>Password:</label> <input type='password' onChange={this.onPasswordChange} value={this.state.password} /> <br/><br/>
         <input type='submit'   onClick={this.onSubmit} value='Login' />               <br/>
         <input type='submit'   onClick={this.onSignUp} value='Sign Up' /> <br/><br/>
-        <ShowBlogs />
+        <ShowUsers />
       </div>
     );
   }
@@ -169,7 +181,7 @@ var App = React.createClass({
   onLogin: function(blogText) {
     this.setState({ blogText: blogText });
   },
-  onLogout: function() {
+  onLogout: function(blogText) {
     this.setState({ blogText: null });
   },
   setClick: function(blogText) {
