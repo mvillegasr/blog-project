@@ -4,7 +4,7 @@
     try {
         $dbh = new PDO("mysql:host=localhost;dbname=project", "root", NULL);
         $dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        $stmt = $dbh->prepare("SELECT username, blogtext FROM users");
+        $stmt = $dbh->prepare("SELECT username, blogtext FROM users ORDER BY username");
         $stmt->execute();
         $row = $stmt->fetchAll(PDO::FETCH_ASSOC);
         

@@ -121,7 +121,7 @@ var ClickScreen = React.createClass({
   onClick: function() {
     ajax('record_click.php', { blogText: this.state.blogText }, function(response) {
       if(response.result === 'success') {
-        this.props.setClicks(response.blogText);
+        this.props.setClick(response.blogText);
       } else if(response.result === 'error') {
         alert('Error: ' + response.msg);
       } else {
